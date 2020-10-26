@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
       },
       entries: {
-        type: Sequelize.NUMBER.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       shift: {

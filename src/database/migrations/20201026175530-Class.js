@@ -12,15 +12,15 @@ module.exports = {
         allowNull: false,
       },
       day: {
-        type: Sequelize.NUMBER.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       month: {
-        type: Sequelize.NUMBER.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       entries: {
-        type: Sequelize.NUMBER.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       hour: {

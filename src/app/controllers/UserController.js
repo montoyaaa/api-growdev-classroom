@@ -31,6 +31,7 @@ class UserController {
       return res.json(error);
     }
   }
+
   async update(req, res) {
     try {
       const schema = Yup.object().shape({
@@ -77,5 +78,4 @@ class UserController {
     }
   }
 }
-
 export default new UserController();

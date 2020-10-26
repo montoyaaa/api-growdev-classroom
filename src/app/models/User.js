@@ -10,6 +10,7 @@ class User extends Model {
           defaultValue: Sequelize.UUIDV4,
           primaryKey: true,
         },
+        is_admin: Sequelize.BOOLEAN,
         name: Sequelize.STRING,
         email: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
