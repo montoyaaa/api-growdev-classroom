@@ -3,9 +3,22 @@ import * as Yup from 'yup';
 import User from '../models/User';
 
 class UserController {
+  async index(req, res) {
+    try {
+      const users = await User.findAll({
+        attributes: ['id', 'is_admin', 'name', 'email', 'password'],
+      });
+
+      return res.json(users);
+    } catch (error) {
+      return res.json(error);
+    }
+  }
+
   async store(req, res) {
     try {
       const schema = Yup.object().shape({
+        is_admin: Yup.boolean().required(),
         name: Yup.string().required(),
         email: Yup.string().email().required(),
         password: Yup.string().required().min(6),
@@ -35,6 +48,7 @@ class UserController {
   async update(req, res) {
     try {
       const schema = Yup.object().shape({
+        is_admin: Yup.boolean(),
         name: Yup.string(),
         email: Yup.string().email(),
         oldPassword: Yup.string().min(6),
@@ -73,6 +87,22 @@ class UserController {
       const { id, name } = await user.update(req.body);
 
       return res.json({ id, name, email });
+    } catch (error) {
+      return res.json(error);
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const user = await User.findByPk(req.params.id);
+
+      if (!user) {
+        return res.status(404).json({ error: 'User does not exist' });
+      }
+
+      await user.destroy();
+
+      return res.status(204).send();
     } catch (error) {
       return res.json(error);
     }
