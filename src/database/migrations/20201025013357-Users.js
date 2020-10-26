@@ -1,24 +1,28 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('scraps', {
+    await queryInterface.createTable('Users', {
       id: {
         type: Sequelize.UUID,
         allowNull: false,
         autoIncrement: false,
         primaryKey: true,
       },
-      title: {
+      is_admin: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      message: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
-      user_id: {
-        type: Sequelize.UUID,
+      password_hash: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: { model: 'users', key: 'id' },
       },
       created_at: {
         type: Sequelize.DATE,
@@ -32,6 +36,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('scraps');
+    await queryInterface.dropTable('Users');
   },
 };
