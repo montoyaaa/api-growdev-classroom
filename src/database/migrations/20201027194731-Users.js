@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
       },
       is_admin: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
       name: {
@@ -19,6 +19,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+      },
+      class_user_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: { model: 'classusers', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       password_hash: {
         type: Sequelize.STRING,
@@ -36,6 +43,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('users');
   },
 };

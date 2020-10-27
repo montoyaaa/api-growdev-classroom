@@ -7,9 +7,6 @@ class ClassUserController {
     try {
       const classUser = await ClassUser.findAll({
         attributes: ['id', 'name', 'entries', 'shift'],
-        where: {
-          user_id: req.userId,
-        },
       });
 
       return res.json(classUser);
@@ -22,20 +19,15 @@ class ClassUserController {
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required(),
-        entries: Yup.number.required(),
-        shift: Yup.string.required(),
+        entries: Yup.number().required(),
+        shift: Yup.string().required(),
       });
 
       if (!(await schema.isValid(req.body))) {
         return res.status(400).json({ error: 'Validation failed' });
       }
 
-      const classUser = {
-        user_id: req.userId,
-        ...req.body,
-      };
-
-      const { id, name, entries, shift } = await ClassUser.create(classUser);
+      const { id, name, entries, shift } = await ClassUser.create(req.body);
 
       return res.json({
         id,
@@ -44,6 +36,7 @@ class ClassUserController {
         shift,
       });
     } catch (error) {
+      console.log(error);
       return res.json(error);
     }
   }
@@ -52,8 +45,8 @@ class ClassUserController {
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required(),
-        entries: Yup.number.required(),
-        shift: Yup.string.required(),
+        entries: Yup.number().required(),
+        shift: Yup.string().required(),
       });
 
       if (!(await schema.isValid(req.body))) {

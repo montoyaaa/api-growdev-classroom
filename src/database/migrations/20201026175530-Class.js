@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Class', {
+    await queryInterface.createTable('class', {
       id: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -12,11 +12,11 @@ module.exports = {
         allowNull: false,
       },
       day: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       month: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       entries: {
@@ -27,10 +27,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      user_id: {
+      class_user_id: {
         type: Sequelize.UUID,
-        allowNull: false,
-        references: { model: 'ClassUsers', key: 'id' },
+        allowNull: true,
+        references: { model: 'classusers', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
@@ -46,6 +46,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Class');
+    await queryInterface.dropTable('class');
   },
 };

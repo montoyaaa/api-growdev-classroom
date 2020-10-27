@@ -10,14 +10,14 @@ class Class extends Model {
           primaryKey: true,
         },
         title: Sequelize.STRING,
-        day: Sequelize.INTEGER,
-        month: Sequelize.INTEGER,
+        day: Sequelize.STRING,
+        month: Sequelize.STRING,
         entries: Sequelize.INTEGER,
         hour: Sequelize.STRING,
-        user_id: {
+        class_user_id: {
           type: Sequelize.UUID,
           references: {
-            model: 'ClassUsers',
+            model: 'classusers',
             key: 'id',
           },
         },
@@ -28,10 +28,6 @@ class Class extends Model {
     );
 
     return this;
-  }
-
-  static associate(models) {
-    this.belongsTo(models.ClassUser);
   }
 }
 

@@ -12,13 +12,6 @@ class ClassUser extends Model {
         name: Sequelize.STRING,
         entries: Sequelize.INTEGER,
         shift: Sequelize.STRING,
-        user_list: {
-          type: Sequelize.UUID,
-          references: {
-            model: 'Users',
-            key: 'id',
-          },
-        },
       },
       {
         sequelize,
@@ -29,7 +22,8 @@ class ClassUser extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.User);
+    this.hasMany(models.Class, { as: 'class', foreignKey: 'class_user_id' });
+    this.hasMany(models.User, { as: 'users', foreignKey: 'class_user_id' });
   }
 }
 

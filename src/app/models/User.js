@@ -13,6 +13,13 @@ class User extends Model {
         is_admin: Sequelize.BOOLEAN,
         name: Sequelize.STRING,
         email: Sequelize.STRING,
+        class_user_id: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'classusers',
+            key: 'id',
+          },
+        },
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
       },
@@ -28,6 +35,10 @@ class User extends Model {
     });
 
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.ClassUser);
   }
 
   checkPassword(password) {
