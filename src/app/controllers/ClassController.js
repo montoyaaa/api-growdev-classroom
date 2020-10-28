@@ -7,7 +7,7 @@ class ClassController {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ['class_user_id'],
+        attributes: ['class_user_id', 'is_admin'],
         where: {
           id: req.userId,
         },
@@ -24,6 +24,14 @@ class ClassController {
         return res
           .status(404)
           .json({ error: 'Nenhuma aula criada para esta turma!' });
+      }
+
+      if (users[0].dataValues.is_admin === true) {
+        const classesAdmin = await Class.findAll({
+          attributes: ['id', 'title', 'day', 'month', 'entries', 'hour'],
+        });
+
+        return res.json(classesAdmin);
       }
 
       return res.json(classes);
