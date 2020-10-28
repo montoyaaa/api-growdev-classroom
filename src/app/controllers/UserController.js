@@ -25,7 +25,7 @@ class UserController {
   async store(req, res) {
     try {
       const schema = Yup.object().shape({
-        is_admin: Yup.boolean().required(),
+        is_admin: Yup.boolean().default(false),
         name: Yup.string().required(),
         email: Yup.string().email().required(),
         password: Yup.string().required().min(6),
