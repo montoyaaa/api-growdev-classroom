@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 import ClassUser from '../models/ClassUser';
+import User from '../models/User';
 
 class ClassUserController {
   async index(req, res) {
@@ -42,6 +43,13 @@ class ClassUserController {
   }
 
   async update(req, res) {
+    const users = await User.findAll({
+      attributes: ['class_user_id'],
+      where: {
+        id: req.userId,
+      },
+    });
+
     try {
       const schema = Yup.object().shape({
         name: Yup.string(),
@@ -59,7 +67,7 @@ class ClassUserController {
         return res.status(404).json({ error: 'Class User does not exist' });
       }
 
-      if (classUser.user_id !== req.userId) {
+      if (classUser.id !== users[0].dataValues.class_user_id) {
         return res.status(401).json({ error: 'You do not own this class!' });
       }
 
@@ -77,6 +85,13 @@ class ClassUserController {
   }
 
   async delete(req, res) {
+    const users = await User.findAll({
+      attributes: ['class_user_id'],
+      where: {
+        id: req.userId,
+      },
+    });
+
     try {
       const classUser = await ClassUser.findByPk(req.params.id);
 
@@ -84,7 +99,7 @@ class ClassUserController {
         return res.status(404).json({ error: 'Class User does not exist' });
       }
 
-      if (classUser.user_id !== req.userId) {
+      if (classUser.id !== users[0].dataValues.class_user_id) {
         return res.status(401).json({ error: 'You do not own this class!' });
       }
 

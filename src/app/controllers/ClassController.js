@@ -73,12 +73,15 @@ class ClassController {
 
   async update(req, res) {
     try {
+      const users = await User.findAll({
+        attributes: ['class_user_id'],
+        where: {
+          id: req.userId,
+        },
+      });
+
       const schema = Yup.object().shape({
-        title: Yup.string().required(),
-        day: Yup.number.required(),
-        month: Yup.number.required(),
-        entries: Yup.number.required(),
-        hour: Yup.string.required(),
+        entries: Yup.number().required(),
       });
 
       if (!(await schema.isValid(req.body))) {
@@ -91,21 +94,14 @@ class ClassController {
         return res.status(404).json({ error: 'Class does not exist' });
       }
 
-      if (classes.user_id !== req.userId) {
+      if (classes.class_user_id !== users[0].dataValues.class_user_id) {
         return res.status(401).json({ error: 'You do not own this class!' });
       }
 
-      const { id, title, day, month, entries, hour } = await Class.create(
-        classes
-      );
+      const { entries } = await Class.create(classes);
 
       return res.json({
-        id,
-        title,
-        day,
-        month,
         entries,
-        hour,
       });
     } catch (error) {
       return res.json(error);
@@ -114,13 +110,20 @@ class ClassController {
 
   async delete(req, res) {
     try {
+      const users = await User.findAll({
+        attributes: ['class_user_id'],
+        where: {
+          id: req.userId,
+        },
+      });
+
       const classes = await Class.findByPk(req.params.id);
 
       if (!classes) {
         return res.status(404).json({ error: 'Class does not exist' });
       }
 
-      if (classes.user_id !== req.userId) {
+      if (classes.class_user_id !== users[0].dataValues.class_user_id) {
         return res.status(401).json({ error: 'You do not own this class!' });
       }
 
