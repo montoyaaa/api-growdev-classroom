@@ -23,7 +23,7 @@ module.exports = {
       class_user_id: {
         type: Sequelize.UUID,
         allowNull: true,
-        references: { model: 'classusers', key: 'id' },
+        references: { model: 'class_users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },

@@ -17,7 +17,7 @@ class Class extends Model {
         class_user_id: {
           type: Sequelize.UUID,
           references: {
-            model: 'classusers',
+            model: 'class_users',
             key: 'id',
           },
         },
@@ -28,6 +28,10 @@ class Class extends Model {
     );
 
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.ClassUser);
   }
 }
 

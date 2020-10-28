@@ -1,19 +1,34 @@
 import * as Yup from 'yup';
 
 import Class from '../models/Class';
+import User from '../models/User';
 
 class ClassController {
   async index(req, res) {
     try {
-      const classes = await Class.findAll({
-        attributes: ['id', 'title', 'day', 'month', 'entries', 'hour'],
+      const users = await User.findAll({
+        attributes: ['class_user_id'],
         where: {
-          user_id: req.userId,
+          id: req.userId,
         },
       });
 
+      const classes = await Class.findAll({
+        attributes: ['id', 'title', 'day', 'month', 'entries', 'hour'],
+        where: {
+          class_user_id: users[0].dataValues.class_user_id,
+        },
+      });
+
+      if (!classes || !users) {
+        return res
+          .status(404)
+          .json({ error: 'Nenhuma aula criada para esta turma!' });
+      }
+
       return res.json(classes);
     } catch (error) {
+      console.log(error);
       return res.json(error);
     }
   }
@@ -22,10 +37,11 @@ class ClassController {
     try {
       const schema = Yup.object().shape({
         title: Yup.string().required(),
-        day: Yup.number.required(),
-        month: Yup.number.required(),
-        entries: Yup.number.required(),
-        hour: Yup.string.required(),
+        day: Yup.string().required(),
+        month: Yup.string().required(),
+        entries: Yup.number().required(),
+        hour: Yup.string().required(),
+        class_user_id: Yup.string().required(),
       });
 
       if (!(await schema.isValid(req.body))) {
@@ -33,7 +49,7 @@ class ClassController {
       }
 
       const classes = {
-        user_id: req.userId,
+        class_user_id: req.classUserId,
         ...req.body,
       };
 
@@ -50,6 +66,7 @@ class ClassController {
         hour,
       });
     } catch (error) {
+      console.log(error);
       return res.json(error);
     }
   }

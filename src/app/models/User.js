@@ -16,7 +16,7 @@ class User extends Model {
         class_user_id: {
           type: Sequelize.UUID,
           references: {
-            model: 'classusers',
+            model: 'class_users',
             key: 'id',
           },
         },

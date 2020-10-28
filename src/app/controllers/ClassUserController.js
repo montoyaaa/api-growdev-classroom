@@ -44,9 +44,9 @@ class ClassUserController {
   async update(req, res) {
     try {
       const schema = Yup.object().shape({
-        name: Yup.string().required(),
-        entries: Yup.number().required(),
-        shift: Yup.string().required(),
+        name: Yup.string(),
+        entries: Yup.number(),
+        shift: Yup.string(),
       });
 
       if (!(await schema.isValid(req.body))) {
