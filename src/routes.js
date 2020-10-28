@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import cors from 'cors';
 
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
@@ -8,6 +9,7 @@ import ClassUserController from './app/controllers/ClassUserController';
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
+routes.use(cors());
 
 routes.post('/users', UserController.store);
 
