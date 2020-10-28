@@ -119,7 +119,7 @@ class ClassController {
   async delete(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ['class_user_id'],
+        attributes: ['class_user_id', 'is_admin'],
         where: {
           id: req.userId,
         },
@@ -129,6 +129,12 @@ class ClassController {
 
       if (!classes) {
         return res.status(404).json({ error: 'Class does not exist' });
+      }
+
+      if (users[0].dataValues.is_admin === true) {
+        await classes.destroy();
+
+        return res.status(204).send();
       }
 
       if (classes.class_user_id !== users[0].dataValues.class_user_id) {
